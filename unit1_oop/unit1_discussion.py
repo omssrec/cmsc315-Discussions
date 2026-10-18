@@ -24,8 +24,15 @@ from copy import copy, deepcopy
 #
 # Replace the pass statement with your implementation.
 
-class ParentClass:
-    pass
+class PressurizedWaterReactor:
+    fuel_type = "Enriched Uranium Oxide (UO2)" # class variable
+
+    def __init__(self, number_of_loops, MW_output):
+        self.number_of_loops = number_of_loops
+        self.MW_output = MW_output
+
+    def describe(self):
+        return f"This reactor uses {self.fuel_type} fuel, has {self.number_of_loops} loops, and produces {self.MW_output} MW."
 
 
 # TODO 2:
@@ -40,8 +47,28 @@ class ParentClass:
 #
 # Replace the pass statement with your implementation.
 
-class ChildClass(ParentClass):
-    pass
+class AP1000Reactor(PressurizedWaterReactor):
+    containment_type = "Passive" # new class variable
+
+    def __init__(self, number_of_loops, MW_output, plant_name, startup_year):
+        super().__init__(number_of_loops, MW_output)
+        self.plant_name = plant_name
+        self.startup_year = startup_year
+        self.refuel_count = 0  # my extension: tracks refueling outages
+
+    def activate_passive_cooling(self):
+        return f"Passive containment cooling activated at {self.plant_name}."
+
+    def describe(self):
+        base_description = super().describe()
+        return f"{base_description} It is an AP1000 at {self.plant_name}, startup year {self.startup_year}, with {self.containment_type} containment."
+    
+# TODO 6: Student created extension
+
+    def refuel(self):
+        """My extension: records a refueling outage."""
+        self.refuel_count += 1
+        return f"{self.plant_name} has completed refueling outage #{self.refuel_count}."
 
 
 # TODO 3:
@@ -57,7 +84,24 @@ class ChildClass(ParentClass):
 
 def demonstrate_namespaces():
     print("\n=== Namespace Demonstration ===")
-    print("TODO: Implement namespace demonstration")
+    reactor1 = AP1000Reactor(2, 1117, "Vogtle Unit 3", 2023)
+    reactor2 = AP1000Reactor(2, 1117, "Vogtle Unit 4", 2024)
+
+    # access the class variable through the class itself
+    print(f"Class variable via the class: AP1000Reactor.containment_type = {AP1000Reactor.containment_type}")
+
+    # access the same class variable through an object
+    print(f"Class variable via an object: reactor1.containment_type = {reactor1.containment_type}")
+
+    # add a new attribute to only one object
+    reactor1.location = "Waynesboro, Georgia"
+
+    # display each object's own namespace
+    print(reactor1.__dict__)
+    print(reactor2.__dict__)
+
+    # display something about the class namespace
+    print(f"Class namespace: containment_type = {AP1000Reactor.__dict__['containment_type']}")
 
 
 # TODO 4:
@@ -73,7 +117,25 @@ def demonstrate_namespaces():
 
 def demonstrate_copying():
     print("\n=== Copy Demonstration ===")
-    print("TODO: Implement shallow copy and deep copy demonstration")
+    original = AP1000Reactor(2, 1117, "Vogtle Unit 3", 2023)
+    original.sensor_readings = ["2300 PSIG", "550 F", "1200 ppm"]  # nested mutable data (a list)
+
+    shallow = copy(original)
+    deep = deepcopy(original)
+
+    # modify the original's nested data
+    original.sensor_readings.append("605 F")
+
+    print(f"Original sensor_readings: {original.sensor_readings}")
+    print(f"Shallow copy sensor_readings: {shallow.sensor_readings}")
+    print(f"Deep copy sensor_readings: {deep.sensor_readings}")
+
+    # TODO: add a comment here explaining what you observe and why
+    # copy.copy() only duplicates the top-level AP1000Reactor object - the nested
+    # sensor_readings list is still the SAME list object in both original and shallow,
+    # so appending to original's list shows up in shallow too. deepcopy() recursively
+    # copies nested objects, so deep's sensor_readings is a fully independent list
+    # and is unaffected by the original's append.
 
 
 # TODO 5:
@@ -89,9 +151,19 @@ def demonstrate_copying():
 def main():
     print("=== Unit 1 OOP Assignment ===")
 
-    print("\nTODO: Create and test your parent object")
+    print("\nParent object:")
+    parent_reactor = PressurizedWaterReactor(3, 1000)
+    print(parent_reactor.describe())
 
-    print("\nTODO: Create and test your child object")
+    print("\nChild object (inheritance in action):")
+    child_reactor = AP1000Reactor(2, 1117, "Vogtle Unit 3", 2023)
+    print(child_reactor.describe())
+    print(child_reactor.activate_passive_cooling())
+    
+    print("\nStudent-created extension: refueling tracker")
+    print(child_reactor.refuel())
+    print(child_reactor.refuel())
+    print(f"Total refuelings at {child_reactor.plant_name}: {child_reactor.refuel_count}")
 
     demonstrate_namespaces()
     demonstrate_copying()
@@ -99,3 +171,9 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+
+
+
+
