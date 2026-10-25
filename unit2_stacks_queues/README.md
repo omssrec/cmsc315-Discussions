@@ -2,35 +2,28 @@
 
 ## Overview
 
-This assignment explores two fundamental linear data structures:
+This project implements two fundamental linear data structures, Stack (LIFO) and Queue (FIFO).  As well as demonstrates them through a building elevator control system scenario.
 
-- Stack (LIFO)
-- Queue (FIFO)
+## Scenario: Elevator Control Panel
 
-## Learning Objectives
+I modeled an elevator's control logic using both structures:
 
-- Implement stack operations
-- Implement queue operations
-- Understand LIFO and FIFO behavior
-- Create edge cases
+- **Stack -- button-press cancellation.** When a rider presses several floor buttons and then starts canceling, the controller will back out the *most recently pressed* floor first. That's LIFO: the last action to be input is the first one undone.
 
-## Requirements
+- **Queue -- call dispatch.** When different floors call the elevator, it can't skip ahead to whoever called most recently, it serves requests in the order they arrived.  That's FIFO: first floor to call, first floor served.
 
-Complete all TODO sections:
+## Design Notes
 
-1. Implement stack operations.
-2. Implement queue operations.
-3. Demonstrate LIFO behavior.
-4. Demonstrate FIFO behavior.
-5. Create and test edge cases.
-6. Create a real-world scenario.
+- `Stack.pop()` and `Stack.peek()` raise `IndexError` on an empty stack rather than failing silently or returning `None` -- this keeps a legitimate "empty result" from being confused with an actual floor value like `0`.
+
+- `Queue` uses `collections.deque` instead of a list because removing from the front of a list is O(n) (every remaining element has to shift), while `deque.popleft()` is O(1).
+
+## Edge Cases Tested
+
+- Popping/dequeuing from an empty structure (handled via IndexError)
+- Peeking/checking front of an empty structure (handled via IndexError)
+- A single-item structure correctly reports `is_empty() == True` after its one item is removed
 
 ## Discussion Board Reflection
 
-After completing the programming assignment, add this reflection to your initial discussion post in LEO.
-
-Your reflection should be approximately 150–200 words and address the following questions:
-
-1. What concepts or skills did you learn while completing this assignment?
-2. What challenges did you encounter, and how did you overcome them?
-3. Explain the differences between stacks and queues as this relates to real-world applications.
+Building this assignment demonstrated how much a data structure's behavior is just a decision about which end you touch.  Stack and queue share almost identical operations (add, remove, look) but swapping `pop()` for `popleft()` is the entire difference between LIFO and FIFO in this control system.  My biggest challenge was rerFalizing I couldn't write generic demo code (push 1, 2, 3, pop) and instead use a scenario concrete enough that the edge cases felt like real situations.  for exmaple canceling a button press you haven't made yet, or an elevator with no pending calls, actually mean something once they're tied to a physical system.  In practice, stacks fit problems where the most recent action matters most (undo, backtracking, call stacks in recursion), while queues fit problems where order of arrival is the whole point (task scheduling, message processing, anything that has to be "fair").
