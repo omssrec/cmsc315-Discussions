@@ -307,6 +307,43 @@ def main():
           "(first occurrence only)")
 
 
+    # My addition: Why Position Matters
+    # Time 20,000 front insertions into a Python list (array: every insert
+    # shifts everything) versus a deque (linked blocks: no shifting), and
+    # compare with appending to the end of a list.
+
+    # Outage managers are always interested in how much time is left to complete the fuel load.
+    # Even the time the program takes to run will be of concern to them.
+    
+    print("\n=== EXTRA: FRONT vs END INSERTION COST ===")
+    n = 20_000
+
+    def list_front():
+        lst = []
+        for i in range(n):
+            lst.insert(0, i)
+
+    def list_end():
+        lst = []
+        for i in range(n):
+            lst.append(i)
+
+    def deque_front():
+        dq = deque()
+        for i in range(n):
+            dq.appendleft(i)
+
+    results = {
+        "list.insert(0, x)    (array, front) ": timeit.timeit(list_front, number=1),
+        "list.append(x)       (array, end)   ": timeit.timeit(list_end, number=1),
+        "deque.appendleft(x)  (linked, front)": timeit.timeit(deque_front, number=1),
+    }
+    fastest = min(results.values())
+    for name, secs in results.items():
+        print(f"  {name}: {secs * 1000:8.2f} ms  ({secs / fastest:5.1f}x)")
+    print("  Takeaway: the array pays for front inserts by shifting; the linked")
+    print("  structure and the array's tail end do not.")
+
 
 if __name__ == "__main__":
     main()
