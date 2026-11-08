@@ -155,7 +155,7 @@ def main():
     # Step 1: create an empty BST.
     registry = BST()
 
-    # Step 2: insert 9 instruments in the order they were commissioned.
+    # Step 2: insert 9 instruments in a random order.
     # 4,100 ft goes in first and becomes the root.  After that, every insert
     # starts at the root and makes one shallower/deeper decision per level,
     # so it only looks at a single path instead of every instrument:
