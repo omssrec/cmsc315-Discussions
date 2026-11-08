@@ -40,7 +40,7 @@ Each comparison during a search is a decision to look shallower or deeper, and i
 - **`search()` / `_search_recursive()`** have two base cases: an empty subtree means not found, and an equal value means found.  Otherwise, the search only goes into the one subtree that could contain the value.
 - **`inorder()` / `_inorder_recursive()`** visit left, node, right.  Since everything smaller is on the left and everything larger is on the right at every level, the output comes out sorted.
 
-In `main()` I inserted 9 instruments in the order they were commissioned (4,100 ft first, so it became the root), with values landing on both sides.  The in-order traversal turned that jumbled insert order into the borehole read from the top down.  I searched for two depths that have instruments (3,300 and 5,200 ft) and two that don't (2,000 and 6,000 ft), with comments tracing the shallower/deeper path each search takes.  I used a small dictionary of instrument tags only to make the output readable; the tree itself stores just the depths.
+In `main()` I inserted 9 instruments in a random order (4,100 ft first, so it became the root), with values landing on both sides.  The in-order traversal turned that jumbled insert order into the borehole read from the top down.  I searched for two depths that have instruments (3,300 and 5,200 ft) and two that don't (2,000 and 6,000 ft), with comments tracing the shallower/deeper path each search takes.  I used a small dictionary of instrument tags only to make the output readable; the tree itself stores just the depths.
 
 ## Edge Cases Tested
 
