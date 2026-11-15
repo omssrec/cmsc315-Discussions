@@ -63,7 +63,7 @@ def linear_search(lst, target, stats=None):
     return -1                     # checked all n elements, not here
 
 
-def binary_search(lst, target stats=None):
+def binary_search(lst, target, stats=None):
     """
     TODO (Student):
     Implement a binary search algorithm.
