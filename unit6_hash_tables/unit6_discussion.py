@@ -64,7 +64,7 @@ def main():
  
     print("\n=== INSERT OPERATIONS ===")
  
-    # A Python dict is a hash table.  When a key is added, Python calls
+    # A Python dictionary is a hash table.  When a key is added, Python calls
     # hash(key) to get an integer, then uses that number to pick a slot in
     # an internal array.  The value is stored in that slot with the key.
     # Keys must be unique and immutable (strings work well), because the
